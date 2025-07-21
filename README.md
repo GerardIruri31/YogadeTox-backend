@@ -18,5 +18,5 @@ Aplicación móvil desarrollada con Expo + React Native, diseñada para brindar 
 
 💳 Integración con pasarelas de pago (Stripe & MercadoPago)
 
-👩‍💻 Panel de administración (vía backend)
+👩‍💻 Panel de administración
 
