@@ -6,6 +6,7 @@ import com.example.demo.qa.domain.QA;
 import com.example.demo.reunión.application.Reunion;
 import com.example.demo.tbIntermediateAdminQa.domain.QAAdmin;
 import com.example.demo.user.domain.User;
+import com.example.demo.video.domain.Video;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,5 +31,10 @@ public class Admin extends User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "admin")
     private List<Reunion> reunion;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "admin")
+    private List<Video> video;
+
+
 
 }

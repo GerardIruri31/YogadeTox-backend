@@ -1,0 +1,53 @@
+package com.example.demo.video.domain;
+
+import com.example.demo.admin.domain.Admin;
+import com.example.demo.clientHistorial.domain.Historial;
+import com.example.demo.curso.domain.Curso;
+import com.example.demo.reunión.application.Reunion;
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.List;
+
+@Entity
+@Data
+public class Video {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+    @Column(name = "idiom", nullable = false)
+    private Idiom idiom;
+    @Column(name = "keyS3Bucket", nullable = false)
+    private String keyS3Bucket;
+
+    @Column(name = "duration", nullable = false)
+    private String duration;
+
+    // NO es obligatorio
+    @Column(name = "descriptionKeywords")
+    private String descriptionKeywords;
+
+    private Boolean isCompleted = false;
+    private Boolean onClick = false;
+    @Column(name = "tag", nullable = false)
+    private String tag;
+    private Boolean isPremium;
+    
+    @ManyToMany(mappedBy = "video")
+    private List<Historial> historial;
+
+    @ManyToOne
+    private Admin admin;
+
+    @ManyToOne
+    private Curso curso;
+
+
+
+
+
+
+}
