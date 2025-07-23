@@ -29,6 +29,8 @@ public class AuthService {
 
     public AuthResponseDto register(RegisterRequestDto registerRequestDto) {
         User newUser = modelMapper.map(registerRequestDto, User.class);
+        newUser.setCreatedAt(ZonedDateTime.now());
+        userRepository.save(newUser);
         AuthResponseDto response = new AuthResponseDto();
         response.setToken("User successfully registered");
         return response;
