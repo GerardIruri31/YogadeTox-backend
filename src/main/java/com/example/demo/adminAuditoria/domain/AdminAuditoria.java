@@ -20,5 +20,6 @@ public class AdminAuditoria {
     @Column(name = "isCommited", nullable = false)
     private IsCommited isCommited;
     @ManyToOne
+    @JoinColumn(name = "admin_id", nullable = false) // columna FK en la tabla video
     private Admin admin;
 }

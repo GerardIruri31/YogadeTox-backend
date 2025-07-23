@@ -16,11 +16,11 @@ public class QAAdmin {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "qa_id")
+    @JoinColumn(name = "qa_id", nullable = false)
     private QA qa;
 
     @ManyToOne
-    @JoinColumn(name = "admin_id")
+    @JoinColumn(name = "admin_id", nullable = false)
     private Admin admin;
 
     @Column(name = "responded_at")

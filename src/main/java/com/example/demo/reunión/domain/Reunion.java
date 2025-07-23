@@ -1,4 +1,4 @@
-package com.example.demo.reunión.application;
+package com.example.demo.reunión.domain;
 
 import com.example.demo.admin.domain.Admin;
 import com.example.demo.client.domain.Client;
@@ -31,9 +31,11 @@ public class Reunion {
     private Boolean isCancelled;
 
     @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false) // columna FK en la tabla video
     private Client client;
 
     @ManyToOne
+    @JoinColumn(name = "admin_id", nullable = false) // columna FK en la tabla video
     private Admin admin;
 
 

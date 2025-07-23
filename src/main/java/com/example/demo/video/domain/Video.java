@@ -3,7 +3,6 @@ package com.example.demo.video.domain;
 import com.example.demo.admin.domain.Admin;
 import com.example.demo.clientHistorial.domain.Historial;
 import com.example.demo.curso.domain.Curso;
-import com.example.demo.reunión.application.Reunion;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -35,14 +34,16 @@ public class Video {
     @Column(name = "tag", nullable = false)
     private String tag;
     private Boolean isPremium;
-    
+
     @ManyToMany(mappedBy = "video")
     private List<Historial> historial;
 
     @ManyToOne
+    @JoinColumn(name = "admin_id", nullable = false) // columna FK en la tabla video
     private Admin admin;
 
     @ManyToOne
+    @JoinColumn(name = "curso_id") // columna FK en la tabla video
     private Curso curso;
 
 

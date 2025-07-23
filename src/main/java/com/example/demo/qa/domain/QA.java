@@ -24,6 +24,7 @@ public class QA {
 
 
     @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false) // columna FK en la tabla video
     private Client client;
 
     @OneToMany(mappedBy = "qa")

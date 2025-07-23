@@ -1,8 +1,7 @@
 package com.example.demo.curso.domain;
 
-import com.example.demo.clientHistorial.domain.Historial;
-import com.example.demo.reunión.application.Reunion;
 import com.example.demo.video.domain.Idiom;
+import com.example.demo.video.domain.Video;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.List;
@@ -32,8 +31,8 @@ public class Curso {
     private String tag;
     private Boolean isPremium;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "video")
-    private List<Curso> curso;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "curso")
+    private List<Video> video;
 
 
 
