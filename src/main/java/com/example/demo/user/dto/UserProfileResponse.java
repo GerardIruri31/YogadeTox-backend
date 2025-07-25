@@ -1,20 +1,15 @@
-package com.example.demo.auth.dto;
+package com.example.demo.user.dto;
 
-import com.example.demo.user.domain.Role;
 import lombok.Data;
 
 import java.time.ZonedDateTime;
 
-
 @Data
-public class RegisterRequestDto {
-    private Role role = Role.FREE;
+public class UserProfileResponse{
     private String firstName;
     private String lastName;
     private String username;
     private String email;
-    private String password;
     private String phoneNumber;
     private ZonedDateTime createdAt;
-
 }

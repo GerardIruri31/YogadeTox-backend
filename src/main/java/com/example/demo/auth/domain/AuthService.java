@@ -4,6 +4,8 @@ package com.example.demo.auth.domain;
 import com.example.demo.auth.dto.AuthResponseDto;
 import com.example.demo.auth.dto.LoginRequestDto;
 import com.example.demo.auth.dto.RegisterRequestDto;
+import com.example.demo.client.domain.Client;
+import com.example.demo.client.infraestructure.ClientRepository;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.infraestructure.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -18,6 +20,8 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
     private ModelMapper modelMapper;
 
     public AuthResponseDto login(LoginRequestDto loginRequestDto) {
@@ -25,12 +29,12 @@ public class AuthService {
         AuthResponseDto response = new AuthResponseDto();
         response.setToken("User successfully logged in");
         return response;
-     }
+    }
 
     public AuthResponseDto register(RegisterRequestDto registerRequestDto) {
-        User newUser = modelMapper.map(registerRequestDto, User.class);
-        newUser.setCreatedAt(ZonedDateTime.now());
-        userRepository.save(newUser);
+        Client newClient = modelMapper.map(registerRequestDto, Client.class);
+        newClient.setCreatedAt(ZonedDateTime.now());
+        clientRepository.save(newClient);
         AuthResponseDto response = new AuthResponseDto();
         response.setToken("User successfully registered");
         return response;
