@@ -1,10 +1,12 @@
 package com.example.demo.Chat.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.demo.admin.domain.Admin;
+import com.example.demo.client.domain.Client;
+import com.example.demo.qa.domain.QA;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.time.ZonedDateTime;
 
 @Entity
 @Data
@@ -13,11 +15,23 @@ public class ChatMessageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String sender;
-
     private String content;
 
-    private String timestamp;
+    private ZonedDateTime timestamp;
+
+    private SenderType senderType; // CLIENT o ADMIN
+
+    @ManyToOne
+    @JoinColumn(name = "qa_id", nullable = false)
+    private QA qa;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = true)
+    private Client client;
+
+    @ManyToOne
+    @JoinColumn(name = "admin_id", nullable = true)
+    private Admin admin;
 }
 
 

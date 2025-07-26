@@ -31,6 +31,4 @@ public class Admin extends User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "admin")
     private List<Content> content = new ArrayList<>();
 
-
-
 }

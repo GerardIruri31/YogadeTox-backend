@@ -1,5 +1,6 @@
 package com.example.demo.qa.domain;
 
+import com.example.demo.Chat.domain.ChatMessageEntity;
 import com.example.demo.admin.domain.Admin;
 import com.example.demo.client.domain.Client;
 import com.example.demo.tbIntermediateAdminQa.domain.QAAdmin;
@@ -30,4 +31,8 @@ public class QA {
 
     @OneToMany(mappedBy = "qa")
     private List<QAAdmin> qaAdmins = new ArrayList<>();
+
+    @OneToMany(mappedBy = "qa", cascade = CascadeType.ALL)
+    private List<ChatMessageEntity> chatMessages = new ArrayList<>();
+
 }

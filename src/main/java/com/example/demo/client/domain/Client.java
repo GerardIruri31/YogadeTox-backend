@@ -23,8 +23,4 @@ public class Client extends User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     private List<Reunion> reunion = new ArrayList<>();
 
-
-
-
-
 }
