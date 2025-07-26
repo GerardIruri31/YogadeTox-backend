@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -17,10 +18,10 @@ public class Client extends User {
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
-    private List<QA> qa;
+    private List<QA> qa = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
-    private List<Reunion> reunion;
+    private List<Reunion> reunion = new ArrayList<>();
 
 
 

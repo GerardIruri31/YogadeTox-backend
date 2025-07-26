@@ -1,4 +1,4 @@
-package com.example.demo.video.domain;
+package com.example.demo.content.domain;
 
 import com.example.demo.admin.domain.Admin;
 import com.example.demo.clientHistorial.domain.Historial;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Video {
+public class Content {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,7 +35,7 @@ public class Video {
     private String tag;
     private Boolean isPremium;
 
-    @ManyToMany(mappedBy = "video")
+    @ManyToMany(mappedBy = "content")
     private List<Historial> historial;
 
     @ManyToOne
@@ -45,10 +45,6 @@ public class Video {
     @ManyToOne
     @JoinColumn(name = "curso_id") // columna FK en la tabla video
     private Curso curso;
-
-
-
-
 
 
 }

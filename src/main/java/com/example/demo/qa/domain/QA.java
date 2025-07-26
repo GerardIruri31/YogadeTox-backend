@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -28,5 +29,5 @@ public class QA {
     private Client client;
 
     @OneToMany(mappedBy = "qa")
-    private List<QAAdmin> qaAdmins;
+    private List<QAAdmin> qaAdmins = new ArrayList<>();
 }

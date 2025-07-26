@@ -2,7 +2,7 @@ package com.example.demo.clientHistorial.domain;
 
 
 import com.example.demo.client.domain.Client;
-import com.example.demo.video.domain.Video;
+import com.example.demo.content.domain.Content;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,11 +22,11 @@ public class Historial {
 
     @ManyToMany
     @JoinTable(
-            name = "historial_video",
+            name = "historial_content",
             joinColumns = @JoinColumn(name = "historial_id"),
-            inverseJoinColumns = @JoinColumn(name = "video_id")
+            inverseJoinColumns = @JoinColumn(name = "content_id")
     )
-    private List<Video> video;
+    private List<Content> content;
 
 
 }

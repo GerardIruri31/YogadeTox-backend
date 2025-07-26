@@ -1,9 +1,11 @@
 package com.example.demo.curso.domain;
 
-import com.example.demo.video.domain.Idiom;
-import com.example.demo.video.domain.Video;
+import com.example.demo.content.domain.Idiom;
+import com.example.demo.content.domain.Content;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,7 +34,7 @@ public class Curso {
     private Boolean isPremium;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "curso")
-    private List<Video> video;
+    private List<Content> content = new ArrayList<>();
 
 
 

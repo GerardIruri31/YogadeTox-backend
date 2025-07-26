@@ -1,10 +1,7 @@
 package com.example.demo.user.application;
 
 
-import com.example.demo.auth.domain.AuthService;
-import com.example.demo.auth.dto.AuthResponseDto;
-import com.example.demo.auth.dto.LoginRequestDto;
-import com.example.demo.auth.dto.RegisterRequestDto;
+
 import com.example.demo.user.domain.UserService;
 import com.example.demo.user.dto.PatchUserInfoRequest;
 import com.example.demo.user.dto.UserProfileResponse;
