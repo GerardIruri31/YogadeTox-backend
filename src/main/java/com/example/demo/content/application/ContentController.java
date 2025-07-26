@@ -1,6 +1,6 @@
 package com.example.demo.content.application;
 
-import com.example.demo.content.domain.CourseService;
+import com.example.demo.curso.domain.CourseService;
 import com.example.demo.content.domain.Idiom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

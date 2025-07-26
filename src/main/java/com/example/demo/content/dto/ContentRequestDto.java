@@ -4,7 +4,7 @@ import com.example.demo.content.domain.Idiom;
 import lombok.Data;
 
 @Data
-public class ContentResponse {
+public class ContentRequestDto {
     private String title;
     private Idiom idiom;
     private String keyS3Bucket;
@@ -13,5 +13,3 @@ public class ContentResponse {
     private String tag;
     private Boolean isPremium;
 }
-
-//Sin ID?

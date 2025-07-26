@@ -1,17 +1,14 @@
-package com.example.demo.content.dto;
+package com.example.demo.curso.dto;
 
 import com.example.demo.content.domain.Idiom;
 import lombok.Data;
 
 @Data
-public class ContentResponse {
+public class CourseRequestDto {
     private String title;
     private Idiom idiom;
-    private String keyS3Bucket;
-    private String duration;
-    private String descriptionKeywords;
+    //private String duration;
+    private String description;
     private String tag;
     private Boolean isPremium;
 }
-
-//Sin ID?
