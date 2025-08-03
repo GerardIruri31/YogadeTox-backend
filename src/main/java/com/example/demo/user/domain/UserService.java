@@ -1,5 +1,6 @@
 package com.example.demo.user.domain;
 
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.dto.PatchUserInfoRequest;
 import com.example.demo.user.dto.UserProfileResponse;
@@ -7,6 +8,9 @@ import com.example.demo.user.infraestructure.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,5 +32,13 @@ public class UserService {
         if (dto.getPhoneNumber() != null) user.setPhoneNumber(dto.getPhoneNumber());
         userRepository.save(user);
         return modelMapper.map(user, UserProfileResponse.class);
+    }
+
+    @Bean(name = "UserDetailsService")
+    public UserDetailsService userDetailsService(){
+        return username -> {
+            User user = userRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+            return (UserDetails) user;
+        };
     }
 }
