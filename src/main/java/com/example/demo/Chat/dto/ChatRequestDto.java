@@ -8,4 +8,4 @@ public class ChatRequestDto {
     private Long clientId;
     private Long adminId;
     private Long qaId;
-} 
+}
