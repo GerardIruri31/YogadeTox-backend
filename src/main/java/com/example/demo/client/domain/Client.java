@@ -15,6 +15,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class Client extends User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")

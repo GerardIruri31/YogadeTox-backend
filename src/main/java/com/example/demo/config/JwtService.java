@@ -26,7 +26,7 @@ public class JwtService {
         return JWT.decode(token).getSubject();
     }
 
-    private String generatedToken(UserDetails userDetails){
+    public String generatedToken(UserDetails userDetails){
         User user = (User) userDetails;
         Date now = new Date();
         Date expiration = new Date(now.getTime() + 1000 * 60 * 60 + 24);

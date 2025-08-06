@@ -17,7 +17,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 public class Admin extends User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     @OneToMany(mappedBy = "admin")
     private List<AdminAuditoria> auditorias = new ArrayList<>();
 

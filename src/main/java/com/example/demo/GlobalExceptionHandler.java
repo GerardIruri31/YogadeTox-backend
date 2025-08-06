@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.auth.exceptions.UserAlreadyExistException;
+import com.example.demo.exceptions.PasswordIncorrectException;
 import com.example.demo.exceptions.ResourceAlreadyExists;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,18 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(ResourceAlreadyExists.class)
     public String handleResourceAlreadyExistsException(ResourceAlreadyExists ex){
+        return ex.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(PasswordIncorrectException.class)
+    public String handlePasswordIncorrectException(PasswordIncorrectException ex){
+        return ex.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public String handleUserAlreadyExistException(UserAlreadyExistException ex){
         return ex.getMessage();
     }
 }
