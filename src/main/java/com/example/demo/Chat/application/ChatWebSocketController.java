@@ -12,16 +12,11 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequiredArgsConstructor
 public class ChatWebSocketController {
-    
     private final ChatService chatService;
 
-    @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/chat")
+    @MessageMapping("/chat/sendMessage")
     public ChatMessageDto sendMessage(@Payload ChatRequestDto chatRequest) {
         return chatService.saveMessage(chatRequest);
     }
 
-    @MessageMapping("/chat.joinQA")
-    public void joinQA(@Payload Long qaId) {
-    }
 } 

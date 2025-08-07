@@ -46,8 +46,6 @@ public class ContentService {
 
 
 
-    //Funciones tipo search?
-    //Buscar video dentro de un curso y buscar video en un buscador general? tipo en el dashboar o algo asi xd
 
 
 }

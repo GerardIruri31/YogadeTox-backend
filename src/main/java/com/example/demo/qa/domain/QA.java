@@ -23,15 +23,11 @@ public class QA {
     private boolean isResponded;
     @Column(name = "message", nullable = false)
     private String message;
-
-
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false) // columna FK en la tabla video
     private Client client;
-
     @OneToMany(mappedBy = "qa")
     private List<QAAdmin> qaAdmins = new ArrayList<>();
-
     @OneToMany(mappedBy = "qa", cascade = CascadeType.ALL)
     private List<ChatMessageEntity> chatMessages = new ArrayList<>();
 

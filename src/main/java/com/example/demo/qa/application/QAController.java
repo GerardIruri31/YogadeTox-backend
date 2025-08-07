@@ -1,9 +1,12 @@
 package com.example.demo.qa.application;
 
 import com.example.demo.qa.domain.QAService;
+import com.example.demo.qa.dto.QAAResponseRequestDto;
+import com.example.demo.qa.dto.QACreatedDTO;
 import com.example.demo.qa.dto.QAResponseDto;
 import com.example.demo.qa.domain.QA;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,32 +16,35 @@ import java.util.List;
 @RequestMapping("/qa")
 @RequiredArgsConstructor
 public class QAController {
-    
-    private final QAService qaService;
+    @Autowired
+    private QAService qaService;
 
+    // CLIENT CREA UNA PREGUNTA
     @PostMapping("/create")
-    public ResponseEntity<QA> createQA(@RequestParam String message, @RequestParam Long clientId) {
+    public ResponseEntity<QACreatedDTO> createQA(@RequestParam String message, @RequestParam Long clientId) {
         return ResponseEntity.ok(qaService.createQA(message, clientId));
     }
 
+    // ADMIN OBTIENE UNA PREGUNTA POR SU ID
     @GetMapping("/{qaId}")
-    public ResponseEntity<QAResponseDto> getQAById(@PathVariable Long qaId) {
-        QA qa = qaService.getQAById(qaId);
-        return ResponseEntity.ok(qaService.convertToDto(qa));
+    public ResponseEntity<QACreatedDTO> getQAById(@PathVariable Long qaId) {
+        return ResponseEntity.ok(qaService.getQAById(qaId));
     }
 
+    // USER/ADMIN OBTIENE LIST QA POR CLIENTE ID
     @GetMapping("/client/{clientId}")
-    public ResponseEntity<List<QA>> getQAsByClient(@PathVariable Long clientId) {
+    public ResponseEntity<List<QACreatedDTO>> getQAsByClient(@PathVariable Long clientId) {
         return ResponseEntity.ok(qaService.getQAsByClient(clientId));
     }
 
+    // ADMIN OBTIENE PREGUNTAS SIN RESPONDER
     @GetMapping("/unresponded")
-    public ResponseEntity<List<QA>> getUnrespondedQAs() {
+    public ResponseEntity<List<QACreatedDTO>> getUnrespondedQAs() {
         return ResponseEntity.ok(qaService.getUnrespondedQAs());
     }
 
-    @PatchMapping("/{qaId}/respond")
-    public ResponseEntity<QA> markAsResponded(@PathVariable Long qaId) {
-        return ResponseEntity.ok(qaService.markAsResponded(qaId));
+    @PostMapping("/qa/{qaId}/respond")
+    public ResponseEntity<QAResponseDto> respondToQA(@PathVariable Long qaId, @RequestBody QAAResponseRequestDto request) {
+        return ResponseEntity.ok(qaService.respondToQA(qaId, request.getAdminId(), request.getMessage()));
     }
 } 

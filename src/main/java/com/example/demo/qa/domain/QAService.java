@@ -1,84 +1,107 @@
 package com.example.demo.qa.domain;
 
+import com.example.demo.admin.domain.Admin;
+import com.example.demo.admin.infraestructure.AdminRepository;
+import com.example.demo.qa.dto.QACreatedDTO;
 import com.example.demo.qa.dto.QAResponseDto;
 import com.example.demo.qa.infraestructure.QARepository;
 import com.example.demo.client.domain.Client;
 import com.example.demo.client.infraestructure.ClientRepository;
 import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.tbIntermediateAdminQa.domain.QAAdmin;
+import com.example.demo.tbIntermediateAdminQa.infraestructure.QAAdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class QAService {
-    
-    private final QARepository qaRepository;
-    private final ClientRepository clientRepository;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private QARepository qaRepository;
+    @Autowired
+    private AdminRepository adminRepository;
+    @Autowired
+    private QAAdminRepository qaAdminRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
-    public QA createQA(String message, Long clientId) {
-        Client client = clientRepository.findById(clientId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado"));
-        
+    public QACreatedDTO createQA(String message, Long clientId) {
+        Client client = clientRepository.findById(clientId).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado"));
         QA qa = new QA();
         qa.setMessage(message);
         qa.setClient(client);
         qa.setCreatedAt(ZonedDateTime.now());
         qa.setResponded(false);
-        
-        return qaRepository.save(qa);
+        QA saved = qaRepository.save(qa);
+        QACreatedDTO dto = modelMapper.map(saved, QACreatedDTO.class);
+        dto.setClientId(clientId);
+        return dto;
     }
 
-    public QA getQAById(Long qaId) {
-        return qaRepository.findById(qaId)
+    public QACreatedDTO getQAById(Long qaId) {
+        QA qa = qaRepository.findById(qaId)
                 .orElseThrow(() -> new ResourceNotFoundException("QA no encontrada"));
-    }
-
-    public List<QA> getQAsByClient(Long clientId) {
-        return qaRepository.findByClientIdOrderByCreatedAtDesc(clientId);
-    }
-
-    public List<QA> getUnrespondedQAs() {
-        return qaRepository.findByIsRespondedOrderByCreatedAtDesc(false);
-    }
-
-    public QA markAsResponded(Long qaId) {
-        QA qa = getQAById(qaId);
-        qa.setResponded(true);
-        return qaRepository.save(qa);
-    }
-
-    public QAResponseDto convertToDto(QA qa) {
-        QAResponseDto dto = modelMapper.map(qa, QAResponseDto.class);
+        QACreatedDTO dto = modelMapper.map(qa, QACreatedDTO.class);
         dto.setClientId(qa.getClient().getId());
-        dto.setClientName(qa.getClient().getFirstName() + " " + qa.getClient().getLastName());
-
-        if (qa.getChatMessages() != null && !qa.getChatMessages().isEmpty()) {
-            dto.setChatMessages(qa.getChatMessages().stream()
-                    .map(this::convertChatMessageToDto)
-                    .collect(Collectors.toList()));
-        }
-        
         return dto;
     }
 
-    private com.example.demo.Chat.dto.ChatMessageDto convertChatMessageToDto(com.example.demo.Chat.domain.ChatMessageEntity chatMessage) {
-        com.example.demo.Chat.dto.ChatMessageDto dto = modelMapper.map(chatMessage, com.example.demo.Chat.dto.ChatMessageDto.class);
-        dto.setQaId(chatMessage.getQa().getId());
-        
-        if (chatMessage.getSenderType() == com.example.demo.Chat.domain.SenderType.CLIENT && chatMessage.getClient() != null) {
-            dto.setSenderId(chatMessage.getClient().getId());
-            dto.setSenderName(chatMessage.getClient().getFirstName() + " " + chatMessage.getClient().getLastName());
-        } else if (chatMessage.getSenderType() == com.example.demo.Chat.domain.SenderType.ADMIN && chatMessage.getAdmin() != null) {
-            dto.setSenderId(chatMessage.getAdmin().getId());
-            dto.setSenderName(chatMessage.getAdmin().getFirstName() + " " + chatMessage.getAdmin().getLastName());
-        }
-        
-        return dto;
+    public List<QACreatedDTO> getQAsByClient(Long clientId) {
+       List<QA> qa_s = qaRepository.findByClientIdOrderByCreatedAtDesc(clientId);
+       List<QACreatedDTO> dtos = new ArrayList<>();
+       for (QA qa : qa_s) {
+            QACreatedDTO dto = modelMapper.map(qa, QACreatedDTO.class);
+            dto.setClientId(clientId);
+            dtos.add(dto);
+       }
+       return dtos;
     }
-} 
+
+    public List<QACreatedDTO> getUnrespondedQAs() {
+        List<QA> qa_s = qaRepository.findByIsRespondedOrderByCreatedAtDesc(false);
+        List<QACreatedDTO> dtos = new ArrayList<>();
+        for (QA qa : qa_s) {
+            QACreatedDTO dto = modelMapper.map(qa, QACreatedDTO.class);
+            dto.setClientId(qa.getClient().getId());
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+
+    public QAResponseDto respondToQA(Long qaId, Long adminId, String message) {
+        QA qa = qaRepository.findById(qaId)
+                .orElseThrow(() -> new ResourceNotFoundException("QA no encontrada"));
+        Admin admin = adminRepository.findById(adminId)
+                .orElseThrow(() -> new ResourceNotFoundException("Admin no encontrado"));
+
+        QAAdmin qaAdmin = qaAdminRepository.findByQaAndAdmin(qa, admin)
+                .orElseGet(() -> {
+                    QAAdmin newRel = new QAAdmin();
+                    newRel.setQa(qa);
+                    newRel.setAdmin(admin);
+                    return qaAdminRepository.save(newRel);
+                });
+
+        qa.setResponded(true);
+        qa.setMessage(message); // si tienes un campo para la respuesta
+        qa.set(ZonedDateTime.now());
+        qaRepository.save(qa);
+
+        // 5. Mapear a DTO de respuesta
+        QAResponseDto responseDto = convertToDto(qa, admin, message);
+
+        // 6. (Opcional) Notificar por WebSocket
+
+        return responseDto;
+    }
+
+}

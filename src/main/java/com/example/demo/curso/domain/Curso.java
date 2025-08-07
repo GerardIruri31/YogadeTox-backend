@@ -20,8 +20,10 @@ public class Curso {
     @Column(name = "idiom", nullable = false)
     private Idiom idiom;
 
+
     @Column(name = "keyS3Bucket", nullable = false)
     private String keyS3Bucket;
+
 
     @Column(name = "duration", nullable = false)
     private String duration;

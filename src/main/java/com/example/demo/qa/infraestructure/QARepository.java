@@ -10,5 +10,4 @@ import java.util.List;
 public interface QARepository extends JpaRepository<QA, Long> {
     List<QA> findByClientIdOrderByCreatedAtDesc(Long clientId);
     List<QA> findByIsRespondedOrderByCreatedAtDesc(boolean isResponded);
-    List<QA> findByClientIdAndIsRespondedOrderByCreatedAtDesc(Long clientId, boolean isResponded);
 }
