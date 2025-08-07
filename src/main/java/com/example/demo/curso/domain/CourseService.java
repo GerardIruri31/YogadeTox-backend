@@ -27,7 +27,7 @@ public class CourseService {
     private final ModelMapper modelMapper;
     private final CursoRepository cursoRepository;
 
-    public List<?> freeContent(Boolean isPremium, Idiom idiom) {
+    public List<Object> getContent(Boolean isPremium, Idiom idiom) {
         List<Content> freeContent = contentRepository.findByIsPremiumAndIdiom(isPremium, idiom);
         List<Content> sinCurso = freeContent.stream()
                 .filter(c -> c.getCurso() == null)
@@ -55,6 +55,7 @@ public class CourseService {
         }
         return response;
     }
+
 
     //Funciones ADMIN
     //Crear curso

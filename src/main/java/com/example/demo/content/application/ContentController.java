@@ -17,12 +17,12 @@ public class ContentController {
     // Se necesita ID del user en token
     @GetMapping("/free")
     public ResponseEntity<List<?>> getFreeContent(@RequestParam Idiom idiom) {
-        return ResponseEntity.ok(courseService.freeContent(false,idiom));
+        return ResponseEntity.ok(courseService.getContent(false,idiom));
     }
 
     // Se necesita ID del user en token
-    /*@GetMapping("/premium")
+    @GetMapping("/premium")
     public ResponseEntity<List<?>> getPremiumContent(@RequestParam Idiom idiom) {
-        return ResponseEntity.ok(courseService.premiumContent(true,idiom));
-    }*/
+        return ResponseEntity.ok(courseService.getContent(true,idiom));
+    }
 }
