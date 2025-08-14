@@ -33,6 +33,7 @@ public class CourseService {
     public CourseResponseDto getByTittle(String title) {
         Role role = jwtService.getCurrentUserRole();
         boolean isPremium = !role.FREE.equals(role);
+        System.out.println(isPremium);
         Curso curso = cursoRepository.findByTitleAndIsPremium(title,isPremium).orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado"));
         CourseResponseDto cursoDto = modelMapper.map(curso, CourseResponseDto.class);
 

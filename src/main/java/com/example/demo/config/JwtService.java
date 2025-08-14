@@ -27,6 +27,11 @@ public class JwtService {
         return JWT.decode(token).getSubject();
     }
 
+    // Se puede usar para obtener userID
+    public Long extractUserId(String token) {
+        return JWT.decode(token).getClaim("userId").asLong();
+    }
+
     public Role getCurrentUserRole() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() instanceof User user) {
@@ -41,6 +46,16 @@ public class JwtService {
         return Role.valueOf(roleStr.replace("ROLE_", ""));
     }
 
+    // Se puede usar para obtener userID
+    public Long getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof User user) {
+            return user.getId();
+        }
+        return null;
+    }
+
+
     public String generatedToken(UserDetails userDetails){
         User user = (User) userDetails;
         Date now = new Date();
@@ -48,6 +63,7 @@ public class JwtService {
         Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.create()
                 .withSubject(user.getEmail())
+                .withClaim("userId", user.getId())
                 .withClaim("email", user.getEmail())
                 .withClaim("role", "ROLE_" + user.getRole().name())
                 .withIssuedAt(now)
