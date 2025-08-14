@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class ContentResponse {
+    private Long Id;
     private String title;
     private Idiom idiom;
     private String keyS3Bucket;

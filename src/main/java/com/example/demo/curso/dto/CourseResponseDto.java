@@ -1,7 +1,10 @@
 package com.example.demo.curso.dto;
 
 import com.example.demo.content.domain.Idiom;
+import com.example.demo.content.dto.ContentResponse;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class CourseResponseDto {
@@ -12,4 +15,6 @@ public class CourseResponseDto {
     private String description;
     private String tag;
     private Boolean isPremium;
+    private String keyS3Bucket;
+    private List<ContentResponse> content;
 }

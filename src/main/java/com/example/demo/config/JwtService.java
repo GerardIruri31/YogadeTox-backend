@@ -2,11 +2,14 @@ package com.example.demo.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.demo.user.domain.Role;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,10 +23,22 @@ public class JwtService {
     @Value("${my.jwt.code}")
     private String secret;
 
-    private final UserService userService;
-
     public String extractUsername(String token){
         return JWT.decode(token).getSubject();
+    }
+
+    public Role getCurrentUserRole() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof User user) {
+            return user.getRole();
+        }
+
+        String roleStr = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .filter(authority -> authority.startsWith("ROLE_"))
+                .findFirst()
+                .orElse("ROLE_FREE");
+        return Role.valueOf(roleStr.replace("ROLE_", ""));
     }
 
     public String generatedToken(UserDetails userDetails){
@@ -40,12 +55,7 @@ public class JwtService {
                 .sign(algorithm);
     }
 
-    public void validateToken(String token, String userEmail){
+    public void validateToken(String token){
         JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
-        UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
-        context.setAuthentication(authToken);
-        SecurityContextHolder.setContext(context);
     }
 }

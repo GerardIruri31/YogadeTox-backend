@@ -10,4 +10,7 @@ import java.util.List;
 @Repository
 public interface ContentRepository extends JpaRepository<Content,Long> {
     List<Content> findByIsPremiumAndIdiom(Boolean isPremium, Idiom idiom);
+    List<Content> findByCursoId(Long cursoId);
+    boolean existsByTitle(String title);
+
 }

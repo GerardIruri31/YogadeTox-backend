@@ -93,14 +93,14 @@ public class QAService {
 
         qa.setResponded(true);
         qa.setMessage(message); // si tienes un campo para la respuesta
-        qa.set(ZonedDateTime.now());
+        qa.setCreatedAt(ZonedDateTime.now());
         qaRepository.save(qa);
 
         // 5. Mapear a DTO de respuesta
-        QAResponseDto responseDto = convertToDto(qa, admin, message);
-
-        // 6. (Opcional) Notificar por WebSocket
-
+        QAResponseDto responseDto = modelMapper.map(qa,QAResponseDto.class);
+        responseDto.setClientId(qa.getClient().getId());
+        responseDto.setId(qaId);
+        responseDto.setClientName(qa.getClient().getUsername());
         return responseDto;
     }
 

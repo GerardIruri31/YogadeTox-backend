@@ -13,5 +13,4 @@ public class QAResponseDto {
     private boolean isResponded;
     private Long clientId;
     private String clientName;
-    private List<com.example.demo.Chat.dto.ChatMessageDto> chatMessages;
-} 
+}

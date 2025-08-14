@@ -18,10 +18,8 @@ public class Client extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     private List<QA> qa = new ArrayList<>();
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     private List<Reunion> reunion = new ArrayList<>();
 

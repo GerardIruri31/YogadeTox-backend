@@ -17,12 +17,10 @@ import com.example.demo.user.domain.Role;
 import com.example.demo.user.infraestructure.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,22 +35,19 @@ public class  AuthService {
     public AuthResponseDto login(LoginRequestDto loginDTO){
         User user = userRepository.findByEmail(loginDTO.getEmail()).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
         if(!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())){
-            throw new PasswordIncorrectException("Contraseña Incorrecta");
+            throw new PasswordIncorrectException("Incorrect Password");
         }
-
         AuthResponseDto response = new AuthResponseDto();
         response.setToken(jwtService.generatedToken(user));
-
         return response;
     }
-    //Solo para registrar clientes
+
+
     public AuthResponseDto register(RegisterRequestDto registerDto){
         if (userRepository.findByEmail(registerDto.getEmail()).isPresent()) {
             throw new UserAlreadyExistException("Email already registered");
         }
-
         String encodedPassword = passwordEncoder.encode(registerDto.getPassword());
-
         Client client = new Client();
         client.setFirstName(registerDto.getFirstName());
         client.setLastName(registerDto.getLastName());
@@ -62,12 +57,9 @@ public class  AuthService {
         client.setPhoneNumber(registerDto.getPhoneNumber());
         client.setRole(Role.FREE);
         client.setCreatedAt(ZonedDateTime.now());
-        
         User newUser = clientRepository.save(client);
-
         AuthResponseDto response = new AuthResponseDto();
         response.setToken(jwtService.generatedToken(newUser));
-
         return response;
     }
 
