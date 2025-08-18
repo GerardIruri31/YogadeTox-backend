@@ -2,7 +2,7 @@ package com.example.demo.client.domain;
 
 
 import com.example.demo.qa.domain.QA;
-import com.example.demo.reunión.domain.Reunion;
+import com.example.demo.reunion.domain.Reunion;
 import com.example.demo.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Data;

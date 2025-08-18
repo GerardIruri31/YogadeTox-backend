@@ -1,11 +1,9 @@
 package com.example.demo;
 
 import com.example.demo.auth.exceptions.UserAlreadyExistException;
-import com.example.demo.exceptions.ErrorResponse;
-import com.example.demo.exceptions.PasswordIncorrectException;
-import com.example.demo.exceptions.ResourceAlreadyExists;
-import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -125,5 +123,29 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .build();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+    }
+
+    @ExceptionHandler(EventAlreadyBookException.class)
+    public ResponseEntity<ErrorResponse> handleEventAlreadyBookException(EventAlreadyBookException ex, HttpServletRequest request){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(ZonedDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
+                .message("Reunion ya reservada")
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(ErrorSendEmailException.class)
+    public ResponseEntity<ErrorResponse> handleErrorSendEmailException(ErrorSendEmailException ex, HttpServletRequest request){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(ZonedDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
+                .message("Error al enviar email")
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 }

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Sesión de Yoga</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #4CAF50;
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .session-details {
+            background-color: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .detail-value {
+            color: #333;
+        }
+        .meeting-button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        .meeting-button:hover {
+            background-color: #45a049;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 14px;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧘‍♀️ YogaDetox</h1>
+            <p>Confirmación de Sesión de Yoga</p>
+        </div>
+
+        <div class="content">
+            <p>Hola <strong th:text="${clientName}">Cliente</strong>,</p>
+            
+            <p>Tu sesión de yoga ha sido confirmada exitosamente. Aquí tienes todos los detalles:</p>
+
+            <div class="session-details">
+                <div class="detail-row">
+                    <span class="detail-label">Tipo de Sesión:</span>
+                    <span class="detail-value" th:text="${sessionTag}">Sesión</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Fecha y Hora:</span>
+                    <span class="detail-value" th:text="${sessionDate}">Fecha</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Descripción:</span>
+                    <span class="detail-value" th:text="${sessionDescription}">Descripción</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Costo:</span>
+                    <span class="detail-value" th:text="${'$' + cost}">$0</span>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <strong>📅 Recordatorio:</strong> Tu sesión comenzará en la fecha y hora programada. 
+                Asegúrate de estar en un lugar tranquilo y preparado para tu práctica de yoga.
+            </div>
+
+<!--            <div >-->
+<!--                <p><strong>🔗 Enlace de la Reunión:</strong></p>-->
+<!--                <a th:href="${meetingUrl}" class="meeting-button">-->
+<!--                    Unirse a la Sesión-->
+<!--                </a>-->
+<!--            </div>-->
+        </div>
+
+        <div class="footer">
+            <p>Gracias por elegir YogaDetox para tu bienestar.</p>
+            <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
+            <p><small>Este es un email automático, por favor no respondas a este mensaje.</small></p>
+        </div>
+    </div>
+</body>
+</html>

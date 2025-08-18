@@ -1,7 +1,7 @@
 package com.example.demo.admin.domain;
 
 
-import com.example.demo.reunión.domain.Reunion;
+import com.example.demo.reunion.domain.Reunion;
 import com.example.demo.tbIntermediateAdminQa.domain.QAAdmin;
 import com.example.demo.user.domain.User;
 import com.example.demo.content.domain.Content;
