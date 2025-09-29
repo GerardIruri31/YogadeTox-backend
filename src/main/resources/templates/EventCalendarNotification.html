@@ -68,6 +68,24 @@
         .meeting-button:hover {
             background-color: #45a049;
         }
+        .meeting-section {
+            background-color: #e8f5e8;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .meeting-section h3 {
+            color: #4CAF50;
+            margin-top: 0;
+        }
+        .meeting-note {
+            font-size: 14px;
+            color: #666;
+            margin-top: 15px;
+            font-style: italic;
+        }
         .footer {
             text-align: center;
             margin-top: 30px;
@@ -86,54 +104,59 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🧘‍♀️ YogaDetox</h1>
-            <p>Confirmación de Sesión de Yoga</p>
+<div class="container">
+    <div class="header">
+        <h1>🧘‍♀️ YogaDetox</h1>
+        <p>Confirmación de Sesión de Yoga</p>
+    </div>
+
+    <div class="content">
+        <p>Hola <strong th:text="${clientName}">Cliente</strong>,</p>
+
+        <p>Tu sesión de yoga ha sido confirmada exitosamente. Aquí tienes todos los detalles:</p>
+
+        <div class="session-details">
+            <div class="detail-row">
+                <span class="detail-label">Tipo de Sesión:</span>
+                <span class="detail-value" th:text="${sessionTag}">Sesión</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Fecha y Hora:</span>
+                <span class="detail-value" th:text="${sessionDate}">Fecha</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Descripción:</span>
+                <span class="detail-value" th:text="${sessionDescription}">Descripción</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Costo:</span>
+                <span class="detail-value" th:text="${'$' + cost}">$0</span>
+            </div>
         </div>
 
-        <div class="content">
-            <p>Hola <strong th:text="${clientName}">Cliente</strong>,</p>
-            
-            <p>Tu sesión de yoga ha sido confirmada exitosamente. Aquí tienes todos los detalles:</p>
-
-            <div class="session-details">
-                <div class="detail-row">
-                    <span class="detail-label">Tipo de Sesión:</span>
-                    <span class="detail-value" th:text="${sessionTag}">Sesión</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Fecha y Hora:</span>
-                    <span class="detail-value" th:text="${sessionDate}">Fecha</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Descripción:</span>
-                    <span class="detail-value" th:text="${sessionDescription}">Descripción</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Costo:</span>
-                    <span class="detail-value" th:text="${'$' + cost}">$0</span>
-                </div>
-            </div>
-
-            <div class="highlight">
-                <strong>📅 Recordatorio:</strong> Tu sesión comenzará en la fecha y hora programada. 
-                Asegúrate de estar en un lugar tranquilo y preparado para tu práctica de yoga.
-            </div>
-
-<!--            <div >-->
-<!--                <p><strong>🔗 Enlace de la Reunión:</strong></p>-->
-<!--                <a th:href="${meetingUrl}" class="meeting-button">-->
-<!--                    Unirse a la Sesión-->
-<!--                </a>-->
-<!--            </div>-->
+        <div class="highlight">
+            <strong>📅 Recordatorio:</strong> Tu sesión comenzará en la fecha y hora programada.
+            Asegúrate de estar en un lugar tranquilo y preparado para tu práctica de yoga.
         </div>
 
-        <div class="footer">
-            <p>Gracias por elegir YogaDetox para tu bienestar.</p>
-            <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
-            <p><small>Este es un email automático, por favor no respondas a este mensaje.</small></p>
+        <div th:if="${meetingUrl != null and !meetingUrl.isEmpty()}" class="meeting-section">
+            <h3>🎥 Información de la Videollamada</h3>
+            <p>Tu sesión de yoga será a través de Google Meet. Haz clic en el enlace para unirte:</p>
+            <a th:href="${meetingUrl}" class="meeting-button" target="_blank">
+                🎥 Unirse a la Sesión
+            </a>
+            <p class="meeting-note">
+                <strong>Nota:</strong> El enlace estará disponible 5 minutos antes de la sesión.
+                También puedes encontrar este evento en tu Google Calendar.
+            </p>
         </div>
     </div>
+
+    <div class="footer">
+        <p>Gracias por elegir YogaDetox para tu bienestar.</p>
+        <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
+        <p><small>Este es un email automático, por favor no respondas a este mensaje.</small></p>
+    </div>
+</div>
 </body>
 </html>

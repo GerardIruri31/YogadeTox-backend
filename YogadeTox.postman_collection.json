@@ -1,0 +1,927 @@
+{
+	"info": {
+		"_postman_id": "6b43231a-61d8-40d1-9a16-04c5d9a940bf",
+		"name": "YogadeTox",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43479410",
+		"_collection_link": "https://gerard-9690572.postman.co/workspace/Gerard's-Workspace~89e55100-a3c3-41ef-8fca-cf2ad92b2f1b/collection/43479410-6b43231a-61d8-40d1-9a16-04c5d9a940bf?action=share&source=collection_link&creator=43479410"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "CreateUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsdWlzLmNhaHVhbmFAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUwNjkwMjcyLCJleHAiOjE3NTA3MjYyNzJ9.YIsLy82ZjKnm7_RBkXakFYbzMo_xklezbiS_0rieVUY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Rodri\",\r\n  \"lastName\": \"Mata\",\r\n  \"username\": \"rodrimata\",\r\n  \"email\": \"rodrimata@gmail.com\",\r\n  \"password\": \"miContraseña123\",\r\n  \"phoneNumber\": \"+51923232232\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/auth/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LoginUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"gerard.iruri31313@gmail.com\",\r\n  \"password\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateAdmin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsdWlzLmNhaHVhbmFAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUwNjkwMjcyLCJleHAiOjE3NTA3MjYyNzJ9.YIsLy82ZjKnm7_RBkXakFYbzMo_xklezbiS_0rieVUY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"admin\",\r\n  \"lastName\": \"admin\",\r\n  \"username\": \"admin\",\r\n  \"email\": \"gerard.iruri31313@gmail.com\",\r\n  \"password\": \"123456789\",\r\n  \"phoneNumber\": \"+51923123421\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/auth/admin/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"admin",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "getUserProfile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJ1c2VySWQiOjEsImVtYWlsIjoiZ2VyYXJkMTBAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTU1NzU3OTAsImV4cCI6MTc1NTY2MjE5MH0.Ale8--xdmPjLqyw4qn35gDJ2Kxg_BlujaiFYu4fZPps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/profile/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"profile",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PatchUserProfile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJ1c2VySWQiOjEsImVtYWlsIjoiZ2VyYXJkMTBAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTU1NzU3OTAsImV4cCI6MTc1NTY2MjE5MH0.Ale8--xdmPjLqyw4qn35gDJ2Kxg_BlujaiFYu4fZPps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"gerardiruri31\",\r\n    \"phoneNumber\": \"+51987654321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/user/profile/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"profile",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cursos",
+			"item": [
+				{
+					"name": "CreateCurso",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJ1c2VySWQiOjIsImVtYWlsIjoiZ2VyYXJkMTBAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTU0NzA2NzQsImV4cCI6MTc1NTU1NzA3NH0.pMjvt-nwwCHhCrW6FrJ2WGakonaXlwRBeJbe16bcp3I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Curso Integral de Spring Boot\",\r\n  \"idiom\": \"ES\",\r\n  \"description\": \"Aprende Spring Boot desde cero con prácticas guiadas.\",\r\n  \"tag\": \"backend\",\r\n  \"isPremium\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/course/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"course",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ActualizarCurso",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJlbWFpbCI6ImdlcmFyZDEwQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzU1MTE5MzA5LCJleHAiOjE3NTUxMjI5MDl9.b8lbX-3uShGcpSYe6Vn-DTdXNSAqWEjRYCEClT4BbIw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"duration\": \"30:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/course",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AssignCourseToContent",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJ1c2VySWQiOjIsImVtYWlsIjoiZ2VyYXJkMTBAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTUyMzUzODYsImV4cCI6MTc1NTIzODk4Nn0.G8TID6yU_Vcedu0rzvrrdRu7taTKAc8vMJQWpsO8HCE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/course/1/assignContent/13",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"course",
+								"1",
+								"assignContent",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UnlinkCourseFromContent",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJlbWFpbCI6ImdlcmFyZDEwQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzU1MTI5Nzk0LCJleHAiOjE3NTUxMzMzOTR9.QFPz1FqEM-hSDL7giJIsSNEBW0osSdqnUBUuIda4PrA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/course/10/unlinkContent/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"course",
+								"10",
+								"unlinkContent",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteCurso",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJ1c2VySWQiOjEsImVtYWlsIjoiZ2VyYXJkMTBAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTU1NzQ3OTIsImV4cCI6MTc1NTY2MTE5Mn0.OCz0-XMkcuDgqG5_twYc65sXG4jfI9mfd1V2LthoOSE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/course/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"course",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCursoByTitle",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJlbWFpbCI6ImdlcmFyZDEwQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzU1MTU2MjI0LCJleHAiOjE3NTUxNTk4MjR9.snTOxZtohXSK7lxvcaxhDzOMvW4iZdBvKkevO2VVkGo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/course/byTitle?title=Curso%20Integral%20de%20Inteligencia%20Artificial%20y%20Desarrollo%20Avanzado",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"course",
+								"byTitle"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "Curso%20Integral%20de%20Inteligencia%20Artificial%20y%20Desarrollo%20Avanzado"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCursoByTag",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQuaXJ1cmkzMTMxM0BnbWFpbC5jb20iLCJ1c2VySWQiOjgsImVtYWlsIjoiZ2VyYXJkLmlydXJpMzEzMTNAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTkwMjk3NjQsImV4cCI6MTc1OTExNjE2NH0.7lhzaOWZUQNxQVnfaiuNgD6fjky37Xa6aEbxH4FLzT8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/course/byTag?idiom=ES&tag=SPA",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"course",
+								"byTag"
+							],
+							"query": [
+								{
+									"key": "idiom",
+									"value": "ES"
+								},
+								{
+									"key": "tag",
+									"value": "SPA"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Content",
+			"item": [
+				{
+					"name": "GetAllContenido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZWlydXJpZUBnbWFpbC5jb20iLCJ1c2VySWQiOjcsImVtYWlsIjoiZ2VpcnVyaWVAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfRlJFRSIsImlhdCI6MTc1OTAyMjEzNywiZXhwIjoxNzU5MTA4NTM3fQ.-7U0X3vu6HXcxShI6WzunO-kPuT1dpwIgnZft8nhieU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/content/all?isPremium=true&idiom=ES",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"content",
+								"all"
+							],
+							"query": [
+								{
+									"key": "isPremium",
+									"value": "true"
+								},
+								{
+									"key": "idiom",
+									"value": "ES"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CrearContenido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJlbWFpbCI6ImdlcmFyZDEwQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzU1MTQ1MTQwLCJleHAiOjE3NTUxNDg3NDB9.kke_5QrLIQb9MUvucp67x1g6K_yHkPoIgcR5mvnW-Ic",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Mastering Guitar Techniques\",\r\n  \"idiom\": \"EN\",\r\n  \"duration\": \"55:00\",\r\n  \"descriptionKeywords\": \"fingerpicking, chord progressions, improvisation, scales\",\r\n  \"tag\": \"music\",\r\n  \"isPremium\": true\r\n}\r\n\r\n\r\n\r\n\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/content/upload/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"content",
+								"upload",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteContenido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZWlydXJpZUBnbWFpbC5jb20iLCJ1c2VySWQiOjEsImVtYWlsIjoiZ2VpcnVyaWVAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTU5OTczNjgsImV4cCI6MTc1NjA4Mzc2OH0._zHjx4GCGeJMxm4iEfAFxn5C-nf4kJol9dRkVn3bwVQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/content/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"content",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ActualizarContenido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJlbWFpbCI6ImdlcmFyZDEwQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzU1MTU0NzYxLCJleHAiOjE3NTUxNTgzNjF9.fE4fh-HoE4gBBA7YBC4D-Vss41s0pV0OddZo_T475bM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Mastering Guitar Techniques\",\r\n    \"descriptionKeywords\": \"fingerpicking, chord progressions, improvisation, scales\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/content/16",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"content",
+								"16"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ContentByTag",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZWlydXJpZUBnbWFpbC5jb20iLCJ1c2VySWQiOjcsImVtYWlsIjoiZ2VpcnVyaWVAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfRlJFRSIsImlhdCI6MTc1OTAyNzQ0OCwiZXhwIjoxNzU5MTEzODQ4fQ.WPYk7sSvWLeZdhyYlgmYNq1q0nnK3zjkUPpx2PduK28",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/content/tag?tag=SPA&isPremium=true&idiom=ES",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"content",
+								"tag"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "SPA"
+								},
+								{
+									"key": "isPremium",
+									"value": "true"
+								},
+								{
+									"key": "idiom",
+									"value": "ES"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Client Historial",
+			"item": [
+				{
+					"name": "AddContentToHistorial",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZWlydXJpZUBnbWFpbC5jb20iLCJ1c2VySWQiOjcsImVtYWlsIjoiZ2VpcnVyaWVAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfRlJFRSIsImlhdCI6MTc1OTAyMjEzNywiZXhwIjoxNzU5MTA4NTM3fQ.-7U0X3vu6HXcxShI6WzunO-kPuT1dpwIgnZft8nhieU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/historial/addContent/7/1?nombreRecurso=CONTENT",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"historial",
+								"addContent",
+								"7",
+								"1"
+							],
+							"query": [
+								{
+									"key": "nombreRecurso",
+									"value": "CONTENT"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetClientHistorial",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyb2RyaW1hdGFAZ21haWwuY29tIiwidXNlcklkIjo0LCJlbWFpbCI6InJvZHJpbWF0YUBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9GUkVFIiwiaWF0IjoxNzU1MjMyNDI1LCJleHAiOjE3NTUyMzYwMjV9.b3uVWm2QIHInZUcXtGOe4xkAD1UTp8Ztn2sc4tIyxSo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/historial/getContent?h_id=4",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"historial",
+								"getContent"
+							],
+							"query": [
+								{
+									"key": "h_id",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "QA's",
+			"item": [
+				{
+					"name": "MakeQA",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyb2RyaW1hdGFAZ21haWwuY29tIiwidXNlcklkIjo0LCJlbWFpbCI6InJvZHJpbWF0YUBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9GUkVFIiwiaWF0IjoxNzU1Mjc5MTk4LCJleHAiOjE3NTUyODI3OTh9.xv1PUitF2lAbD8DWEz_1WwF3bmtVklhmk_E_1wFQlXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/qa/create/4?message=Que%20dia%20es%20hoy?",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qa",
+								"create",
+								"4"
+							],
+							"query": [
+								{
+									"key": "message",
+									"value": "Que%20dia%20es%20hoy?"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetQAbyID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJ1c2VySWQiOjIsImVtYWlsIjoiZ2VyYXJkMTBAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTUzMTE0NDQsImV4cCI6MTc1NTMxNTA0NH0.X5qLOdC_IaivEAdJ6TDC5-DYO5_8XV8AC2U4KBcqU7s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/qa/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qa",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetQAsByClientID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJ1c2VySWQiOjIsImVtYWlsIjoiZ2VyYXJkMTBAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTUzMTE0NDQsImV4cCI6MTc1NTMxNTA0NH0.X5qLOdC_IaivEAdJ6TDC5-DYO5_8XV8AC2U4KBcqU7s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/qa/client/4",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qa",
+								"client",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUnrespondedQAs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJ1c2VySWQiOjIsImVtYWlsIjoiZ2VyYXJkMTBAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTUyODA0ODksImV4cCI6MTc1NTI4NDA4OX0.Mv0h2D4s8OeRXby7sjWxw1CnMrY5v0lWZ7c1G5RDq0s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/qa/unresponded",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qa",
+								"unresponded"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RespondQA",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJ1c2VySWQiOjIsImVtYWlsIjoiZ2VyYXJkMTBAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTUzMTE0NDQsImV4cCI6MTc1NTMxNTA0NH0.X5qLOdC_IaivEAdJ6TDC5-DYO5_8XV8AC2U4KBcqU7s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"adminId\": 2,\r\n    \"message\": \"Todo mal\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/qa/1/respond",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qa",
+								"1",
+								"respond"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllQA's",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnZXJhcmQxMEBnbWFpbC5jb20iLCJ1c2VySWQiOjIsImVtYWlsIjoiZ2VyYXJkMTBAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3NTUzMTE0NDQsImV4cCI6MTc1NTMxNTA0NH0.X5qLOdC_IaivEAdJ6TDC5-DYO5_8XV8AC2U4KBcqU7s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/qa/all",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"qa",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

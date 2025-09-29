@@ -7,7 +7,6 @@ import lombok.Data;
 public class ContentRequestDto {
     private String title;
     private Idiom idiom;
-    private String keyS3Bucket;
     private String duration;
     private String descriptionKeywords;
     private String tag;

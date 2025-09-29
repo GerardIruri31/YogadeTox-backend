@@ -1,10 +1,9 @@
 package com.example.demo.Events.EventsCalendarNotification;
 
-import com.example.demo.Events.EmailService;
+import com.example.demo.Events.service.EmailService;
 import com.example.demo.exceptions.ErrorSendEmailException;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class EventNotificationEventListener {
-    
     private final EmailService emailService;
 
     @EventListener

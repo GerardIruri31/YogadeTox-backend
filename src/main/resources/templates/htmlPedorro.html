@@ -82,7 +82,11 @@
 
         <div class="login-section" id="loginSection">
             <h2>Login</h2>
-            <input type="email" id="loginEmail" placeholder="Email" value="sebastian@gmail.com">
+            <p><strong>Datos de prueba:</strong></p>
+            <p>Cliente: juan@gmail.com / 123</p>
+            <p>Admin: admin@gmail.com / 123</p>
+            <p>Cliente Premium: maria@gmail.com / 123</p>
+            <input type="email" id="loginEmail" placeholder="Email" value="juan@gmail.com">
             <input type="password" id="loginPassword" placeholder="Password" value="123">
             <button onclick="login()">Login</button>
             <div id="loginStatus"></div>
@@ -123,6 +127,7 @@
         let currentUser = null;
         let selectedQAId = null;
         let currentUserType = null;
+        let currentQAId = null;
 
         async function login() {
             const email = document.getElementById('loginEmail').value;
@@ -137,9 +142,35 @@
 
                 if (response.ok) {
                     const result = await response.json();
-                    currentUser = result;
+                    // Guardar el token
+                    localStorage.setItem('token', result.token);
+                    
+                    // Obtener información del usuario usando el token
+                    await loadUserProfile();
+                } else {
+                    const errorData = await response.json();
+                    document.getElementById('loginStatus').innerHTML = `Login falló: ${errorData.message || 'Error desconocido'}`;
+                }
+            } catch (error) {
+                document.getElementById('loginStatus').innerHTML = 'Error de conexión: ' + error.message;
+            }
+        }
 
-                    if (email.includes('admin')) {
+        async function loadUserProfile() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('http://localhost:8080/user/profile', {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const userProfile = await response.json();
+                    currentUser = userProfile;
+
+                    if (userProfile.role === 'ADMIN') {
                         currentUserType = 'admin';
                         showAdminSection();
                     } else {
@@ -147,12 +178,12 @@
                         showClientSection();
                     }
                     
-                    document.getElementById('loginStatus').innerHTML = 'Login exitoso';
+                    document.getElementById('loginStatus').innerHTML = `Login exitoso - ${userProfile.firstName} ${userProfile.lastName} (${userProfile.role})`;
                 } else {
-                    document.getElementById('loginStatus').innerHTML = 'Login falló';
+                    document.getElementById('loginStatus').innerHTML = 'Error obteniendo perfil del usuario';
                 }
             } catch (error) {
-                document.getElementById('loginStatus').innerHTML = 'Error de conexión';
+                document.getElementById('loginStatus').innerHTML = 'Error cargando perfil: ' + error.message;
             }
         }
 
@@ -175,11 +206,9 @@
             stompClient.connect({}, function(frame) {
                 document.getElementById('clientStatus').innerHTML = 'Conectado';
                 document.getElementById('clientStatus').className = 'status connected';
-
-                stompClient.subscribe('/topic/chat', function(message) {
-                    const data = JSON.parse(message.body);
-                    addMessage('clientMessages', data.content, data.senderType === 'CLIENT' ? 'client' : 'admin');
-                });
+                
+                // Cargar QAs del cliente al conectar
+                loadClientQAs();
             });
         }
 
@@ -212,19 +241,87 @@
 
             const data = {
                 message: message,
-                clientId: 1,
+                clientId: currentUser.id,
                 adminId: null,
-                qaId: null
+                qaId: currentQAId // Usar el QA actual si existe
             };
 
-            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(data));
+            stompClient.send("/app/chat/sendMessage", {}, JSON.stringify(data));
             addMessage('clientMessages', message, 'client');
             document.getElementById('clientMessage').value = '';
+            
+            // Si es el primer mensaje, suscribirse al topic de la QA
+            if (!currentQAId) {
+                // El QA se creará en el backend, necesitamos esperar la respuesta
+                setTimeout(() => {
+                    // Recargar las QAs del cliente para obtener el nuevo QA
+                    loadClientQAs();
+                }, 1000);
+            }
+        }
+
+        async function loadClientQAs() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`http://localhost:8080/chat/qa/client/${currentUser.id}`, {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const qas = await response.json();
+                
+                if (qas.length > 0) {
+                    // Usar la QA más reciente
+                    currentQAId = qas[0].id;
+                    
+                    // Suscribirse al topic de esta QA
+                    if (stompClient) {
+                        stompClient.subscribe(`/topic/qa/${currentQAId}`, function(message) {
+                            const data = JSON.parse(message.body);
+                            addMessage('clientMessages', data.content, data.senderType === 'CLIENT' ? 'client' : 'admin');
+                        });
+                    }
+                    
+                    // Cargar historial
+                    loadClientChatHistory(currentQAId);
+                }
+            } catch (error) {
+                console.error('Error cargando QAs del cliente:', error);
+            }
+        }
+
+        async function loadClientChatHistory(qaId) {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`http://localhost:8080/chat/history/${qaId}`, {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const messages = await response.json();
+                
+                const container = document.getElementById('clientMessages');
+                container.innerHTML = '';
+                
+                messages.forEach(msg => {
+                    addMessage('clientMessages', msg.content, msg.senderType === 'CLIENT' ? 'client' : 'admin');
+                });
+            } catch (error) {
+                console.error('Error cargando historial del cliente:', error);
+            }
         }
 
         async function loadPendingQAs() {
             try {
-                const response = await fetch('http://localhost:8080/qa/unresponded');
+                const token = localStorage.getItem('token');
+                const response = await fetch('http://localhost:8080/chat/qa/unresponded', {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
                 const qas = await response.json();
                 
                 const container = document.getElementById('pendingQAs');
@@ -235,8 +332,9 @@
                     div.className = 'qa-item';
                     div.innerHTML = `
                         <strong>QA ${qa.id}</strong><br>
-                        Cliente: ${qa.clientName}<br>
-                        Pregunta: ${qa.message}
+                        Cliente: ${qa.client ? (qa.client.firstName + ' ' + qa.client.lastName) : 'N/A'}<br>
+                        Pregunta: ${qa.message}<br>
+                        Fecha: ${new Date(qa.createdAt).toLocaleString()}
                     `;
                     div.onclick = () => selectQA(qa);
                     container.appendChild(div);
@@ -250,15 +348,52 @@
             selectedQAId = qa.id;
             document.getElementById('selectedQA').innerHTML = `
                 <strong>QA ${qa.id}</strong><br>
-                Cliente: ${qa.clientName}<br>
-                Pregunta: ${qa.message}
+                Cliente: ${qa.client ? (qa.client.firstName + ' ' + qa.client.lastName) : 'N/A'}<br>
+                Pregunta: ${qa.message}<br>
+                Fecha: ${new Date(qa.createdAt).toLocaleString()}
             `;
 
+            // Limpiar mensajes anteriores
+            document.getElementById('adminMessages').innerHTML = '';
+
+            // Cargar historial del chat
+            loadChatHistory(qa.id);
+
             if (stompClient) {
+                // Desuscribirse de cualquier suscripción anterior
+                if (stompClient.subscriptions) {
+                    Object.keys(stompClient.subscriptions).forEach(key => {
+                        stompClient.unsubscribe(key);
+                    });
+                }
+                
+                // Suscribirse al topic específico de esta QA
                 stompClient.subscribe(`/topic/qa/${qa.id}`, function(message) {
                     const data = JSON.parse(message.body);
                     addMessage('adminMessages', data.content, data.senderType === 'CLIENT' ? 'client' : 'admin');
                 });
+            }
+        }
+
+        async function loadChatHistory(qaId) {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`http://localhost:8080/chat/history/${qaId}`, {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const messages = await response.json();
+                
+                const container = document.getElementById('adminMessages');
+                container.innerHTML = '';
+                
+                messages.forEach(msg => {
+                    addMessage('adminMessages', msg.content, msg.senderType === 'CLIENT' ? 'client' : 'admin');
+                });
+            } catch (error) {
+                console.error('Error cargando historial:', error);
             }
         }
 
@@ -270,12 +405,12 @@
 
             const data = {
                 message: message,
-                clientId: 1,
-                adminId: 1,
+                clientId: null,
+                adminId: currentUser.id,
                 qaId: selectedQAId
             };
 
-            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(data));
+            stompClient.send("/app/chat/sendMessage", {}, JSON.stringify(data));
             addMessage('adminMessages', message, 'admin');
             document.getElementById('adminMessage').value = '';
         }

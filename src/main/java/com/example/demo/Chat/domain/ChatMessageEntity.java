@@ -15,11 +15,21 @@ public class ChatMessageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     // Contenido del msj
+    @Column
     private String content;
     // Hora del mensaje
+    @Column
     private ZonedDateTime timestamp;
     // Enum del usuario
+    @Column
+    @Enumerated(EnumType.STRING)
     private SenderType senderType; // CLIENT o ADMIN
+    // Si es el primer mensaje del chat
+    @Column(name = "is_first_message")
+    private Boolean isFirstMessage = false;
+    // Tipo de mensaje
+    @Column(name = "message_type")
+    private String messageType = "TEXT";
     // ID de la pregunta inicial que pertenece msj en el chat
     @ManyToOne
     @JoinColumn(name = "qa_id", nullable = false)

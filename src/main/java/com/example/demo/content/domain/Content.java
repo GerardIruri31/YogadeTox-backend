@@ -17,6 +17,7 @@ public class Content {
     @Column(name = "title", nullable = false)
     private String title;
     @Column(name = "idiom", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Idiom idiom;
     @Column(name = "keyS3Bucket", nullable = false)
     private String keyS3Bucket;
@@ -25,17 +26,15 @@ public class Content {
     // NO es obligatorio
     @Column(name = "descriptionKeywords")
     private String descriptionKeywords;
-    private Boolean isCompleted = false;
-    private Boolean onClick = false;
     @Column(name = "tag", nullable = false)
     private String tag;
     private Boolean isPremium;
     @ManyToMany(mappedBy = "content")
     private List<Historial> historial;
     @ManyToOne
-    @JoinColumn(name = "admin_id", nullable = false) // columna FK en la tabla video
+    @JoinColumn(name = "admin_id", nullable = false)
     private Admin admin;
     @ManyToOne
-    @JoinColumn(name = "curso_id") // columna FK en la tabla video
+    @JoinColumn(name = "curso_id")
     private Curso curso;
 }

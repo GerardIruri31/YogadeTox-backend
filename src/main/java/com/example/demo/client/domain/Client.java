@@ -1,8 +1,9 @@
 package com.example.demo.client.domain;
 
 
+import com.example.demo.clientHistorial.domain.Historial;
 import com.example.demo.qa.domain.QA;
-import com.example.demo.reunion.domain.Reunion;
+import com.example.demo.reunion_temp.domain.Reunion;
 import com.example.demo.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -14,13 +15,16 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
+@PrimaryKeyJoinColumn(name = "id")
 public class Client extends User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     private List<QA> qa = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     private List<Reunion> reunion = new ArrayList<>();
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    private Historial historial;
 
 }

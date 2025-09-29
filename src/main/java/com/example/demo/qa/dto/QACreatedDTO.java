@@ -10,4 +10,5 @@ public class QACreatedDTO {
     private boolean isResponded;
     private String message;
     private Long clientId;
+    private String clientUsername;
 }

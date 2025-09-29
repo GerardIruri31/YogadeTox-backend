@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Prueba de Upload a S3 via Spring Boot (Vanilla JS)</title>
+    <style>
+        :root {
+            --bg: #0b0b0c;
+            --panel: #141417;
+            --muted: #8b8b93;
+            --text: #f4f4f5;
+            --accent: #ffffff;
+            --error: #ff6b6b;
+            --ok: #9be29b;
+            --radius: 14px;
+        }
+        html,
+        body {
+            height: 100%;
+        }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+            Cantarell, Noto Sans, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+        .wrap {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 28px;
+        }
+        h1 {
+            font-size: 22px;
+            margin: 0 0 16px;
+        }
+        .card {
+            background: var(--panel);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin: 14px 0;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04),
+            0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+        }
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        label {
+            font-size: 12px;
+            color: var(--muted);
+        }
+        input[type="text"],
+        input[type="url"],
+        input[type="number"],
+        select,
+        .fake-file {
+            background: #1d1d22;
+            border: 1px solid #2a2a30;
+            color: var(--text);
+            border-radius: 10px;
+            padding: 10px 12px;
+            outline: none;
+        }
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+        .file-line {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            appearance: none;
+            border: 0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #111;
+        }
+        .btn-ghost {
+            background: #1d1d22;
+            color: var(--text);
+            border: 1px solid #2a2a30;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .muted {
+            color: var(--muted);
+        }
+        .progress {
+            height: 10px;
+            background: #1f1f26;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .bar {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width 0.2s ease;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #1a1a1f;
+            border: 1px solid #2a2a30;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 0;
+        }
+        a {
+            color: #b7d4ff;
+        }
+        .split {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .kv {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pill {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 1px solid #2a2a30;
+            background: #1b1b21;
+            color: var(--muted);
+        }
+        .error {
+            color: var(--error);
+        }
+        .ok {
+            color: var(--ok);
+        }
+        @media (max-width: 720px) {
+            .row,
+            .row-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h1>Prueba de Upload a S3 via Spring Boot (Vanilla JS)</h1>
+
+    <!-- Config básica -->
+    <section class="card">
+        <div class="row">
+            <div class="field">
+                <label>Backend BASE URL</label>
+                <input
+                        id="baseUrl"
+                        type="url"
+                        placeholder="http://localhost:8080"
+                        value="http://localhost:8080"
+                />
+            </div>
+            <div class="field">
+                <label>Admin ID</label>
+                <input id="adminId" type="text" placeholder="1" value="1" />
+            </div>
+        </div>
+        <div class="field" style="margin-top: 12px">
+            <label>Bearer Token (JWT)</label>
+            <input
+                    id="jwtToken"
+                    type="text"
+                    placeholder="pega aquí tu token JWT"
+            />
+        </div>
+        <div class="muted" style="margin-top: 10px">
+            Se asume <code>POST /content/{adminId}</code> con
+            <code>@RequestPart("file")</code> (archivo) y
+            <code>@RequestPart("contentData")</code> (JSON del DTO). Ajusta si tu
+            endpoint es distinto.
+        </div>
+    </section>
+
+    <!-- Metadatos opcionales -->
+    <section class="card">
+        <div class="row-3">
+            <div class="field">
+                <label>Título (opcional)</label>
+                <input id="titulo" type="text" placeholder="Mi video" />
+            </div>
+            <div class="field">
+                <label>Idiom (opcional)</label>
+                <select id="idioma">
+                    <option value="ES">ES</option>
+                    <option value="EN">EN</option>
+                </select>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 12px">
+            <div class="field">
+                <label>Tag (opcional)</label>
+                <input id="tag" type="text" placeholder="demo" value="demo" />
+            </div>
+            <div class="field">
+                <label>Description Keywords (opcional)</label>
+                <input
+                        id="descriptionKeywords"
+                        type="text"
+                        placeholder="palabras clave, separadas por comas"
+                />
+            </div>
+            <div class="field split">
+                <label style="min-width: 120px">isPremium (opcional)</label>
+                <input id="isPremium" type="checkbox" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Archivo + acciones -->
+    <section class="card">
+        <div class="file-line">
+            <input id="file" type="file" />
+            <button id="btnSubir" class="btn btn-primary">Subir</button>
+            <button id="btnLimpiar" class="btn btn-ghost">Limpiar</button>
+            <span id="fileInfo" class="pill">Ningún archivo</span>
+        </div>
+
+        <div id="progressWrap" style="margin-top: 12px; display: none">
+            <div class="progress"><div id="bar" class="bar"></div></div>
+            <div class="muted" id="pct" style="margin-top: 6px">0%</div>
+        </div>
+
+        <div id="msg" style="margin-top: 10px"></div>
+
+        <div id="respuestaWrap" style="margin-top: 12px; display: none">
+            <div
+                    class="split"
+                    style="justify-content: space-between; margin-bottom: 8px"
+            >
+                <strong>Respuesta</strong>
+                <span id="statusBadge" class="pill">—</span>
+            </div>
+            <pre id="respuesta"></pre>
+            <div id="previewLink" style="margin-top: 8px"></div>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="muted">
+            Sugerencia: si tu bucket es privado, devuelve una URL presignada corta
+            en <code>fileUrl</code> para previsualizar.
+        </div>
+    </section>
+</div>
+
+<script>
+    const $ = (id) => document.getElementById(id);
+
+    const baseUrl = $("baseUrl");
+    const adminId = $("adminId");
+    const jwtToken = $("jwtToken");
+    const titulo = $("titulo");
+    const idioma = $("idioma");
+
+    const tag = $("tag");
+    const descriptionKeywords = $("descriptionKeywords");
+    const isPremium = $("isPremium");
+
+    const inputFile = $("file");
+    const btnSubir = $("btnSubir");
+    const btnLimpiar = $("btnLimpiar");
+    const fileInfo = $("fileInfo");
+
+    const progressWrap = $("progressWrap");
+    const bar = $("bar");
+    const pct = $("pct");
+
+    const msg = $("msg");
+    const respuestaWrap = $("respuestaWrap");
+    const respuesta = $("respuesta");
+    const previewLink = $("previewLink");
+    const statusBadge = $("statusBadge");
+
+    let currentFile = null;
+
+    function resetState() {
+        bar.style.width = "0%";
+        pct.textContent = "0%";
+        progressWrap.style.display = "none";
+        msg.textContent = "";
+        msg.className = "";
+        respuestaWrap.style.display = "none";
+        respuesta.textContent = "";
+        previewLink.innerHTML = "";
+        statusBadge.textContent = "—";
+    }
+
+    inputFile.addEventListener("change", () => {
+        currentFile =
+            inputFile.files && inputFile.files[0] ? inputFile.files[0] : null;
+        if (currentFile) {
+            const mb = Math.round(currentFile.size / 1024 / 1024);
+            fileInfo.textContent = `${currentFile.name} (${mb} MB)`;
+        } else {
+            fileInfo.textContent = "Ningún archivo";
+        }
+        resetState();
+    });
+
+    btnLimpiar.addEventListener("click", () => {
+        inputFile.value = "";
+        currentFile = null;
+        fileInfo.textContent = "Ningún archivo";
+        resetState();
+    });
+
+    btnSubir.addEventListener("click", () => {
+        if (!currentFile) {
+            showMsg("Selecciona un archivo primero", true);
+            return;
+        }
+        if (!baseUrl.value) {
+            showMsg("Configura la BASE URL", true);
+            return;
+        }
+        if (!adminId.value) {
+            showMsg("Ingresa el Admin ID", true);
+            return;
+        }
+
+        const url = joinUrl(
+            baseUrl.value,
+            `/course/${encodeURIComponent(adminId.value)}`
+        );
+        const fd = new FormData();
+        // Parte 1: archivo (coincide con @RequestPart("file"))
+        fd.append("file", currentFile);
+        // Parte 2: JSON del DTO (coincide con @RequestPart("contentData"))
+        const dto = {
+            title: titulo.value || "",
+            idiom: idioma.value || "",
+            description: descriptionKeywords.value || "",
+            tag: tag.value || "",
+            isPremium: !!isPremium.checked,
+        };
+        fd.append(
+            "contentData",
+            new Blob([JSON.stringify(dto)], { type: "application/json" })
+        );
+        // (Los campos se envían dentro de contentData como JSON)
+
+        resetState();
+        progressWrap.style.display = "block";
+        btnSubir.disabled = true;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+
+        // Agregar header de Authorization si hay token
+        if (jwtToken.value) {
+            xhr.setRequestHeader(
+                "Authorization",
+                "Bearer " + jwtToken.value.trim()
+            );
+        }
+
+        xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+                const percent = Math.round((e.loaded / e.total) * 100);
+                bar.style.width = percent + "%";
+                pct.textContent = percent + "%";
+            }
+        };
+
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                btnSubir.disabled = false;
+                let data = null;
+                try {
+                    data = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                } catch (err) {
+                    /* ignore */
+                }
+
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    showMsg("Subida completada", false);
+                    msg.classList.add("ok");
+                    renderResponse(data || { raw: xhr.responseText });
+                } else {
+                    const errText =
+                        (data && (data.errorMessage || data.message)) ||
+                        xhr.statusText ||
+                        "Error al subir";
+                    showMsg(errText, true);
+                    renderResponse(data || { raw: xhr.responseText });
+                }
+            }
+        };
+
+        xhr.onerror = () => {
+            btnSubir.disabled = false;
+            showMsg("Error de red durante la subida", true);
+        };
+
+        xhr.send(fd);
+    });
+
+    function renderResponse(obj) {
+        respuestaWrap.style.display = "block";
+        respuesta.textContent = JSON.stringify(obj, null, 2);
+        statusBadge.textContent =
+            obj && (obj.success || obj.ok) ? "success" : "status";
+
+        // Si hay fileUrl, muestra link para previsualizar
+        previewLink.innerHTML = "";
+        const url =
+            obj && (obj.fileUrl || obj.url || (obj.data && obj.data.fileUrl));
+        if (url) {
+            const a = document.createElement("a");
+            a.href = url;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            a.textContent = "Abrir fileUrl en otra pestaña";
+            previewLink.appendChild(a);
+        }
+    }
+
+    function showMsg(text, isError) {
+        msg.textContent = text;
+        msg.className = isError ? "error" : "ok";
+    }
+
+    function joinUrl(base, path) {
+        if (!base) return path;
+        const b = base.endsWith("/") ? base.slice(0, -1) : base;
+        return b + path;
+    }
+</script>
+</body>
+</html>

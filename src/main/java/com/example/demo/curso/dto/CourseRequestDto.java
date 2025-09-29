@@ -10,5 +10,4 @@ public class CourseRequestDto {
     private String description;
     private String tag;
     private Boolean isPremium;
-    private String keyS3Bucket;
 }

@@ -22,6 +22,8 @@ import java.util.Date;
 public class JwtService {
     @Value("${my.jwt.code}")
     private String secret;
+    
+    private final UserService userService;
 
     public String extractUsername(String token){
         return JWT.decode(token).getSubject();
@@ -34,23 +36,57 @@ public class JwtService {
 
     public Role getCurrentUserRole() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getPrincipal() instanceof User user) {
+        if (auth == null) return Role.FREE;
+
+        Object principal = auth.getPrincipal();
+        if (principal instanceof User user) {
             return user.getRole();
         }
 
         String roleStr = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .filter(authority -> authority.startsWith("ROLE_"))
+                .filter(a -> a.startsWith("ROLE_"))
                 .findFirst()
                 .orElse("ROLE_FREE");
         return Role.valueOf(roleStr.replace("ROLE_", ""));
     }
 
+
     // Se puede usar para obtener userID
     public Long getCurrentUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getPrincipal() instanceof User user) {
-            return user.getId();
+        if (auth != null) {
+            if (auth.getPrincipal() instanceof User user) {
+                return user.getId();
+            } else if (auth.getPrincipal() instanceof String userIdStr) {
+                try {
+                    return Long.parseLong(userIdStr);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
+    // Obtener email del usuario actual
+    public String getCurrentUserEmail() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            if (auth.getPrincipal() instanceof User user) {
+                return user.getEmail();
+            } else if (auth.getPrincipal() instanceof String userIdStr) {
+                // Ahora el principal es el userId como String
+                // Necesitamos obtener el email desde el JWT o desde la base de datos
+                try {
+                    Long userId = Long.parseLong(userIdStr);
+                    // Buscar el usuario en la base de datos para obtener el email
+                    User user = userService.findById(userId);
+                    return user != null ? user.getEmail() : null;
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            }
         }
         return null;
     }
@@ -59,7 +95,7 @@ public class JwtService {
     public String generatedToken(UserDetails userDetails){
         User user = (User) userDetails;
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + 1000 * 60 * 60 + 24);
+        Date expiration = new Date(now.getTime() + 1000 * 60 * 60 * 24);
         Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.create()
                 .withSubject(user.getEmail())
@@ -71,7 +107,7 @@ public class JwtService {
                 .sign(algorithm);
     }
 
-    public void validateToken(String token){
+    public void validateToken(String token) {
         JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
     }
 }

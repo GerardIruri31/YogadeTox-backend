@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "qa_admin_relation")
 public class QAAdmin {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // o AUTO
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -26,4 +26,6 @@ public class QAAdmin {
     @Column(name = "responded_at")
     private LocalDateTime respondedAt;
 
+    @Column(name = "response")
+    private String response;
 }

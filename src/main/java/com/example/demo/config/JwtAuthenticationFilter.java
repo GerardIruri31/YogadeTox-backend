@@ -30,10 +30,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.startsWith("/auth/") || path.startsWith("/ws/");
+        return path.startsWith("/auth/")
+                || path.equals("/ws")
+                || path.startsWith("/ws/");
     }
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -54,11 +57,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 jwtService.validateToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+                Long userId = jwtService.extractUserId(jwt);
+                
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
-                                userDetails,                   // principal
+                                userId.toString(),             // principal = userId como String
                                 null,                          // credentials
-                                userDetails.getAuthorities()   // <-- CLAVE
+                                userDetails.getAuthorities()   // authorities
                         );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
@@ -69,6 +74,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (JWTVerificationException e){
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("TOKEN INVALIDO");
+        } catch (Exception e) {
+            // Rechazar peticiones con tokens de usuarios que no existen
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("USUARIO NO ENCONTRADO");
         }
     }
 }

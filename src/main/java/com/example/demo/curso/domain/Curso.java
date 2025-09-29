@@ -1,5 +1,6 @@
 package com.example.demo.curso.domain;
 
+import com.example.demo.admin.domain.Admin;
 import com.example.demo.content.domain.Idiom;
 import com.example.demo.content.domain.Content;
 import jakarta.persistence.*;
@@ -18,6 +19,7 @@ public class Curso {
     @Column(name = "title", nullable = false)
     private String title;
     @Column(name = "idiom", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Idiom idiom;
 
 
@@ -35,9 +37,11 @@ public class Curso {
     private String tag;
     private Boolean isPremium;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "curso")
+    @OneToMany(mappedBy = "curso")
     private List<Content> content = new ArrayList<>();
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_id", nullable = false)
+    private Admin admin;
 
 }

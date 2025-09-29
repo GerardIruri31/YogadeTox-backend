@@ -10,4 +10,15 @@ import java.util.List;
 public interface ChatMessageRepository extends JpaRepository<ChatMessageEntity, Long> {
     List<ChatMessageEntity> findByQaIdOrderByTimestampAsc(Long qaId);
     List<ChatMessageEntity> findByQaIdAndSenderTypeOrderByTimestampAsc(Long qaId, com.example.demo.Chat.domain.SenderType senderType);
+    
+    // Nuevas consultas para conversaciones
+    ChatMessageEntity findFirstByQaIdOrderByTimestampDesc(Long qaId);
+    Long countByQaIdAndSenderType(Long qaId, com.example.demo.Chat.domain.SenderType senderType);
+    List<ChatMessageEntity> findByQaIdOrderByTimestampDesc(Long qaId);
+    
+    // Consulta para traer solo los últimos mensajes (más recientes primero, luego invertir)
+    List<ChatMessageEntity> findTop50ByQaIdOrderByTimestampDesc(Long qaId);
+    
+    // Consultas de conteo
+    Long countByTimestampAfter(java.time.ZonedDateTime timestamp);
 }

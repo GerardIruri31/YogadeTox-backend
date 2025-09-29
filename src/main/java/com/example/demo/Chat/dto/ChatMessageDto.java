@@ -21,4 +21,10 @@ public class ChatMessageDto {
     private Long senderId;
     // Nombre enviador
     private String senderName;
+    // Si es el primer mensaje
+    private Boolean isFirstMessage;
+    // Tipo de mensaje
+    private String messageType;
+    // Título de la conversación
+    private String conversationTitle;
 }

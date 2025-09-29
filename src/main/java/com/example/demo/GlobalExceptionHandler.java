@@ -1,9 +1,7 @@
 package com.example.demo;
 
-import com.example.demo.auth.exceptions.UserAlreadyExistException;
 import com.example.demo.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
 
 import java.time.ZonedDateTime;
 
@@ -88,12 +87,18 @@ public class GlobalExceptionHandler {
 
     // Handler para errores 500 - Errores internos del servidor
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGlobalException(HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex, HttpServletRequest request) {
+        // Log del error real para debugging
+        System.err.println("=== ERROR GLOBAL CAPTURADO ===");
+        System.err.println("Error: " + ex.getMessage());
+        System.err.println("Tipo: " + ex.getClass().getSimpleName());
+        ex.printStackTrace();
+        
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(ZonedDateTime.now())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-                .message("Ha ocurrido un error interno del servidor")
+                .message("Error interno: " + ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
@@ -147,5 +152,17 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(CalendarIntegrationException.class)
+    public ResponseEntity<ErrorResponse> handleCalendarIntegrationException(CalendarIntegrationException ex, HttpServletRequest request){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(ZonedDateTime.now())
+                .status(HttpStatus.SERVICE_UNAVAILABLE.value())
+                .error(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase())
+                .message("Error de integración con Google Calendar: " + ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);
     }
 }

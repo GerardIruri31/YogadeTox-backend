@@ -1,7 +1,6 @@
 package com.example.demo.config;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
@@ -22,18 +21,35 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+    private static final String[] WHITELIST_URLS = {
+            "/auth/login",
+            "/auth/register",
+            "/auth/admin/register",
+            "/auth/grant-code",
+            "/auth/validate",
+            "/chat/test",
+            "/debug/**",
+            "/ws/**",
+            "/oauth2/google/calendar/connect",
+            "/oauth2/google/calendar/callback",
+            "/",
+            "/auth/forget-password",
+            "/auth/reset-password"
+    };
+    //Se quito             "/chat/**",
+    //            "/qa/**",
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception{
         return http.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/ws/**").permitAll()
+                        .requestMatchers(WHITELIST_URLS).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
 
     @Bean
@@ -45,7 +61,6 @@ public class SecurityConfig {
                 """);
         return hierarchy;
     }
-
 
     @Bean
     static MethodSecurityExpressionHandler methodSecurityExpressionHandler(RoleHierarchy roleHierarchy){

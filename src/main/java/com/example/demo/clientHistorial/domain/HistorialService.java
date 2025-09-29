@@ -6,16 +6,14 @@ import com.example.demo.content.dto.ContentResponse;
 import com.example.demo.content.infraestructure.ContentRepository;
 import com.example.demo.curso.domain.Curso;
 import com.example.demo.curso.dto.CursoConContenidosDto;
+import com.example.demo.curso.infraestructure.CursoRepository;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.qa.domain.QAService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,17 +24,29 @@ public class HistorialService {
     private ContentRepository contentRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private CursoRepository cursoRepository;
 
-    public String addContentToHistorial(Long h_id, Long contId) {
-        Historial historial = historialRepository.findById(h_id)
-                .orElseThrow(() -> new ResourceNotFoundException("Historial no encontrado"));
-        Content content = contentRepository.findById(contId)
-                .orElseThrow(() -> new ResourceNotFoundException("Content no encontrado"));
-        if (!historial.getContent().contains(content)) {
-            historial.getContent().add(content);
+    // FALTA MEJORAR
+    public void addContentToHistorial(Long historial_id, Long recursoId, NombreRecurso nombreRecurso) {
+        Historial historial = historialRepository.findById(historial_id).orElseThrow(() -> new ResourceNotFoundException("Historial no encontrado"));
+        List<Content> contenidoHistorial = historial.getContent();
+        // Creado para comparar: O(n)
+        Set<Content> existentes = new HashSet<>(contenidoHistorial);
+        switch (nombreRecurso) {
+            case CONTENT -> {
+                Content content = contentRepository.findById(recursoId).orElseThrow(() -> new ResourceNotFoundException("Content no encontrado"));
+                if (existentes.add(content)) {
+                    contenidoHistorial.add(content);
+                }
+            }
+            case CURSO -> {
+                Curso curso = cursoRepository.findById(recursoId).orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado"));
+                curso.getContent().stream().filter(existentes::add).forEach(contenidoHistorial::add);
+            }
+            default -> throw new IllegalArgumentException("Tipo de recurso no soportado: " + nombreRecurso);
         }
         historialRepository.save(historial);
-        return "Content succcessfully added";
     }
 
     public List<Object> getClientHistorial(Long h_id) {
@@ -56,6 +66,7 @@ public class HistorialService {
             ContentResponse dto = modelMapper.map(content, ContentResponse.class);
             response.add(dto);
         }
+
         for (Map.Entry<Curso, List<Content>> entry : agrupados.entrySet()) {
             Map<String, Object> identifyCurso = new HashMap<>();
             Curso curso = entry.getKey();

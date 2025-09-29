@@ -23,6 +23,14 @@ public class QA {
     private boolean isResponded;
     @Column(name = "message", nullable = false)
     private String message;
+    @Column(name = "title")
+    private String title;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
+    @Column(name = "last_message_time")
+    private ZonedDateTime lastMessageTime;
+    @Column(name = "message_count")
+    private Integer messageCount = 0;
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false) // columna FK en la tabla video
     private Client client;

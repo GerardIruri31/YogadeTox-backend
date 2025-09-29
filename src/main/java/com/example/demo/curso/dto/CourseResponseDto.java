@@ -17,4 +17,5 @@ public class CourseResponseDto {
     private Boolean isPremium;
     private String keyS3Bucket;
     private List<ContentResponse> content;
+    private Long adminId;
 }

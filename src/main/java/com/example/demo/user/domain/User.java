@@ -1,10 +1,18 @@
 package com.example.demo.user.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+
+import com.example.demo.auth.domain.PasswordResetToken;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
@@ -24,6 +32,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -32,13 +41,24 @@ public class User implements UserDetails {
     @Column(name = "username", nullable = false)
     private String username;
     @Column(name = "email", nullable = false)
+    @Email
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number", nullable = true)
     private String phoneNumber;
     @Column(name = "created_at", nullable = false)
     private ZonedDateTime createdAt;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    @OneToMany(
+            mappedBy = "usuario",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<PasswordResetToken> tokensReset;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -48,10 +68,6 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return email;
-    }
-
-    public String getRealUsername() {
-        return username;
     }
 
     @Override
@@ -73,4 +89,9 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
+
+
 }

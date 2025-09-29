@@ -12,4 +12,10 @@ public class ChatRequestDto {
     private Long adminId;
     // ID de la pregunta inicial
     private Long qaId;
+    // ID del chat (opcional)
+    private Long chatId;
+    // Título de la conversación (opcional)
+    private String conversationTitle;
+    // Si es un nuevo chat
+    private Boolean isNewChat;
 }
