@@ -1,22 +1,73 @@
-#🧘 YogaDetox App
-Aplicación móvil desarrollada con Expo + React Native, diseñada para brindar acceso a videocursos de yoga, audios de meditación y sesiones privadas. El sistema está pensado tanto para alumnos como para el equipo administrativo, con una plataforma segura, multilenguaje y conectada a un backend centralizado.
+# YogaDetox Backend – Spring Boot API
 
-🌟 Características principales
-🎥 Videocursos pregrabados (clases de yoga)
+REST API for YogaDetox mobile app (Expo + React Native).
 
-🎧 Audios de meditación
+Provides secure access to yoga video courses, meditation audios, private sessions, and admin tools.
 
-📅 Reserva de sesiones privadas
+## Features
 
-💬 Chat directo con el administrador
+- 🎥 **Video courses** – Metadata + S3 storage
+- 🎧 **Meditation audios** – Metadata + S3 storage
+- 📅 **Private sessions** – Google Calendar integration
+- 💬 **Direct chat** – WebSockets with admin
+- 🔐 **JWT auth** – Login/register (email + Google), role-based access
+- 🌐 **Multi-language** – Content in es/en
+- 🧘 **Free vs Premium** – Role-based content access
+- 👩‍💻 **Admin panel** – Manage users, content, sessions
+- 💳 **Payments** – Stripe & MercadoPago (planned)
 
-🔐 Autenticación con JWT
+## API Modules
 
-🌐 Multilenguaje (Español / Inglés)
+### Auth & Users
+- Register / Login (email + Google)
+- JWT issuance & validation
+- Roles: `STUDENT_FREE`, `STUDENT_PREMIUM`, `ADMIN`
 
-🧘 Acceso diferenciado entre contenido libre y premium
+### Content
+- CRUD for Courses (video)
+- CRUD for Meditation Audios
+- S3 upload URLs / file handling
+- Public vs premium flags
 
-💳 Integración con pasarelas de pago (Stripe & MercadoPago)
+### Private Sessions
+- Create / list / cancel bookings
+- Google Calendar sync (teacher calendars)
 
-👩‍💻 Panel de administración
+### Chat
+- WebSocket endpoint for real-time admin chat
+
+### Admin
+- Manage users, roles, content visibility
+- View bookings and activity
+
+## Tech Stack
+
+- **Java** + **Spring Boot** (REST, Security, WebSocket)
+- **JWT** (stateless auth)
+- **Amazon S3** (videos, audios)
+- **Google Calendar API**
+- **JPA / Hibernate** + **PostgreSQL/MySQL**
+
+## Local Setup
+
+1. Configure `application.yml` / `.properties`:
+   - Database connection
+   - S3 credentials
+   - JWT secret
+   - Google API credentials
+
+2. Run:
+```bash
+./mvnw spring-boot:run
+```
+
+API available at:
+```
+http://localhost:8080
+```
+
+## To Do
+
+- Integrate Stripe & MercadoPago payments
+- Add full i18n layer for texts/messages
 
