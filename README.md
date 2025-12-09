@@ -46,7 +46,7 @@ Provides secure access to yoga video courses, meditation audios, private session
 - **JWT** (stateless auth)
 - **Amazon S3** (videos, audios)
 - **Google Calendar API**
-- **JPA / Hibernate** + **PostgreSQL/MySQL**
+- **JPA / Hibernate** + **PostgreSQL**
 
 ## Local Setup
 
